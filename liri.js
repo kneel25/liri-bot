@@ -16,8 +16,8 @@ function spotifyThis(requestInput) {
     if (requestInput === "") {  //spotify-this-song 'song title here' 
         requestInput = "The Sign Ace of Base"
     }
-    spotify
-    .search({
+var spotify = new Spotify(keys.spotify);
+    spotify.search({
             type: 'track',
             query: requestInput
         })
@@ -26,7 +26,7 @@ function spotifyThis(requestInput) {
             var song = JSON.stringify(response.tracks.items[0].name);
             var preview = JSON.stringify(response.tracks.items[0].album.external_urls.spotify);
             var album = JSON.stringify(response.tracks.items[0].album.name);
-            console.log(JSON.stringify(response.tracks.items[0], null, 2))
+            // console.log(JSON.stringify(response.tracks.items[0], null, 2))
 
             console.log(`
                     Artist(s): ${artist}
@@ -110,13 +110,25 @@ function grabMovie(parameter) {
     });
 };
 
+console.log(process.argv)
+var requestType = nodeArgs[2];
 
-if (process.argv[2] === "movie-this"){
-    grabMovie(nodeArgs[3]);
-}else if(process.argv[2] === "my-tweets"){
-    retrieveTweets();
-}else if(process.argv[2] === "spotify-this-song"){
-    spotifyThis(nodeArgs[3]);
+var requestInput = "";
+
+for(var i = 3; i < nodeArgs.length; i++){
+    requestInput = requestInput + " " + nodeArgs[i];
 }
 
-    
+if (requestType === "movie-this"){
+    grabMovie(requestInput);
+}else if(requestType === "my-tweets"){
+    retrieveTweets(requestInput);
+}else if(requestType=== "spotify-this-song"){
+    spotifyThis(requestInput);
+}; 
+
+
+
+
+
+
