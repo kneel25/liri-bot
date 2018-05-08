@@ -2,18 +2,22 @@ var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
 var request = require('request');
 var keys = require('./keys.js');
+var fs = require('fs');
+var twitterKeys = keys.twitter;
 
 var nodeArgs = process.argv;
+
+
 
 // module.exports = keys;
 
 
-function spotifyThis() {
+function spotifyThis(requestInput) {
     if (requestInput === "") {  //spotify-this-song 'song title here' 
         requestInput = "The Sign Ace of Base"
     }
     spotify
-        .search({
+    .search({
             type: 'track',
             query: requestInput
         })
@@ -41,7 +45,7 @@ function retrieveTweets() {
     fs.appendFile('./log.txt', 'User Command: node liri.js my-tweets\n\n', (err) => {
         if (err) throw err;
     });
-    var client = new twitter(twitterKeys); // my-tweets
+    var client = new Twitter(twitterKeys); // my-tweets
     var params = {
         screen_name: '@kristaneel',
         count: 20
@@ -76,7 +80,8 @@ function retrieveTweets() {
 };
 
 
-function grabMovie() {
+function grabMovie(parameter) {
+
     console.log("My Favorite movie is Robin Hood!");
 
     var findMovie;  //  movie-this '<movie name here>'
@@ -104,3 +109,14 @@ function grabMovie() {
         }
     });
 };
+
+
+if (process.argv[2] === "movie-this"){
+    grabMovie(nodeArgs[3]);
+}else if(process.argv[2] === "my-tweets"){
+    retrieveTweets();
+}else if(process.argv[2] === "spotify-this-song"){
+    spotifyThis(nodeArgs[3]);
+}
+
+    
